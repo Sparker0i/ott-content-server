@@ -14,7 +14,8 @@ var db2 = {
     hostname: process.env.OTT_CONTENT_SERVER,
     port: process.env.OTT_CONTENT_PORT,
     username: process.env.OTT_CONTENT_USERNAME,
-    password: process.env.OTT_CONTENT_PASSWORD
+    password: process.env.OTT_CONTENT_PASSWORD,
+    schema: process.env.OTT_CONTENT_SCHEMA
 };
 
 var dbConnection;
@@ -42,12 +43,12 @@ function queryDatabase(query, req, res) {
 }
 
 app.post('/country-select', function (req, res) {
-    queryDatabase("SELECT * FROM OTT_TEST.COUNTRY", req, res);
+    queryDatabase(`SELECT * FROM ${db2.schema}.COUNTRY`, req, res);
 });
 
 app.post('/platform-select', function(req, res) {
     const code = req.body.code;
-    queryDatabase(`SELECT * FROM OTT_TEST.PLATFORM_AVAILABILITY WHERE COUNTRY_CODE = '${code}'`, req, res);
+    queryDatabase(`SELECT * FROM ${db2.schema}.PLATFORM_AVAILABILITY WHERE COUNTRY_CODE = '${code}'`, req, res);
 })
 
 app.listen(app.get('port'), function () {
