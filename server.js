@@ -29,6 +29,15 @@ ibmdb.open(connString, function (err, connection) {
     }
 });
 
+app.get('/country-select', function (req, res) {
+    dbConnection.query("SELECT * FROM OTT_TEST.COUNTRY", function(err, result, moreResultSets) {
+        console.log(moreResultSets)
+        
+        if (!err) res.send(result)
+        else res.send(err.message)
+    })
+});
+
 app.listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
 });
