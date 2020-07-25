@@ -60,6 +60,13 @@ app.post('/show-list', function(req, res) {
     queryDatabase(`SELECT ID, NAME, DESCRIPTION, TRAILER FROM ${db2.schema}.SHOW WHERE ID = (SELECT SHOW_ID FROM ${db2.schema}.EPISODE WHERE ID = (SELECT EPISODE_ID FROM ${db2.schema}.EPISODE_AVAILABILITY WHERE PLATFORM_MAPPING_ID = (SELECT ID FROM ${db2.schema}.PLATFORM_AVAILABILITY WHERE PLATFORM_ID = ${platformId} AND COUNTRY_CODE = '${code}')));`, req, res);
 });
 
+app.post('/episode-list', function(req, res) {
+    const code = req.body.code;
+    const platformId = req.body.platform_id;
+    const showId = req.body.show_id;
+    queryDatabase(`SELECT * FROM ${db2.schema}.EPISODE WHERE SHOW_ID = ${showId} AND ID IN (SELECT EPISODE_ID FROM ${db2.schema}.EPISODE_AVAILABILITY WHERE PLATFORM_MAPPING_ID = (SELECT ID FROM ${db2.schema}.PLATFORM_AVAILABILITY WHERE PLATFORM_ID = ${platformId} AND COUNTRY_CODE = '${code}'));`, req, res);
+})
+
 app.listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
 });
