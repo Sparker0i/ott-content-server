@@ -16,3 +16,19 @@ var db2 = {
     username: process.env.OTT_CONTENT_USERNAME,
     password: process.env.OTT_CONTENT_PASSWORD
 };
+
+var dbConnection;
+var connString = `DRIVER={DB2};DATABASE=${db2.db};UID=${db2.username};PWD=${db2.password};HOSTNAME=${db2.hostname};port=${db2.port}`;
+
+ibmdb.open(connString, function (err, connection) {
+    if (err) {
+        console.log(err.message)
+    }
+    else {
+        dbConnection = connection
+    }
+});
+
+app.listen(app.get('port'), function () {
+    console.log('Express server listening on port ' + app.get('port'));
+});
