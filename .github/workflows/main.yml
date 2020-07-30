@@ -1,26 +1,19 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
-
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
+name: Build and Deploy
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     name: Build
     runs-on: ubuntu-latest
-    - name: Checkout Repo
-      uses: actions/checkout@master
-    - name: Install Dependencies
-      run: npm install
-      working-directory: ./server
-
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Install Dependencies
+        run: npm install
+        working-directory: ./server
   deploy:
     name: Deploy
     needs: build
@@ -32,7 +25,7 @@ jobs:
         uses: zxyle/publish-gae-action@master
         with:
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          service_account_key: ${{ secrets.SERVICE_ACCOUNT }}
           project_id: ${{ secrets.PROJECT_ID }}
           gae_config_path: ./server/app.yaml
       - name: Publish app to Google App Engine
