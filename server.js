@@ -45,6 +45,10 @@ function queryDatabase(query, req, res) {
     })
 }
 
+app.get('/', (req, res) => {
+    res.status(200).send('Hello, world!').end();
+});
+
 app.post('/country-list', function (req, res) {
     queryDatabase(`SELECT * FROM ${db2.schema}.COUNTRY`, req, res);
 });
@@ -75,3 +79,5 @@ app.post('/genre-list', function(req, res) {
 app.listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
 });
+
+module.exports = app;
