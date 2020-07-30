@@ -46,7 +46,7 @@ function queryDatabase(query, req, res) {
 }
 
 app.get('/', (req, res) => {
-    res.status(200).send('Hello, world!').end();
+    res.status(200).send('Welcome to OTT Content Server').end();
 });
 
 app.post('/country-list', function (req, res) {
