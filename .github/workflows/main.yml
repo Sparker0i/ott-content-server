@@ -21,8 +21,6 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
-        env:
-          
       - name: Initialize Google Cloud SDK
         uses: zxyle/publish-gae-action@master
         with:
