@@ -11,6 +11,13 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
+        env:
+          OTT_CONTENT_DATABASE: ${{ secrets.OTT_CONTENT_DATABASE }}
+          OTT_CONTENT_PASSWORD: ${{ secrets.OTT_CONTENT_PASSWORD }}
+          OTT_CONTENT_PORT: ${{ secrets.OTT_CONTENT_PORT }}
+          OTT_CONTENT_SERVER: ${{ secrets.OTT_CONTENT_SERVER }}
+          OTT_CONTENT_USERNAME: ${{ secrets.OTT_CONTENT_USERNAME }}
+          OTT_CONTENT_SCHEMA: ${{ secrets.OTT_CONTENT_SCHEMA }}
       - name: Install Dependencies
         run: npm install
         working-directory: ./server
@@ -21,11 +28,25 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
+        env:
+          OTT_CONTENT_DATABASE: ${{ secrets.OTT_CONTENT_DATABASE }}
+          OTT_CONTENT_PASSWORD: ${{ secrets.OTT_CONTENT_PASSWORD }}
+          OTT_CONTENT_PORT: ${{ secrets.OTT_CONTENT_PORT }}
+          OTT_CONTENT_SERVER: ${{ secrets.OTT_CONTENT_SERVER }}
+          OTT_CONTENT_USERNAME: ${{ secrets.OTT_CONTENT_USERNAME }}
+          OTT_CONTENT_SCHEMA: ${{ secrets.OTT_CONTENT_SCHEMA }}
       - name: Initialize Google Cloud SDK
         uses: zxyle/publish-gae-action@master
+        env:
+          OTT_CONTENT_DATABASE: ${{ secrets.OTT_CONTENT_DATABASE }}
+          OTT_CONTENT_PASSWORD: ${{ secrets.OTT_CONTENT_PASSWORD }}
+          OTT_CONTENT_PORT: ${{ secrets.OTT_CONTENT_PORT }}
+          OTT_CONTENT_SERVER: ${{ secrets.OTT_CONTENT_SERVER }}
+          OTT_CONTENT_USERNAME: ${{ secrets.OTT_CONTENT_USERNAME }}
+          OTT_CONTENT_SCHEMA: ${{ secrets.OTT_CONTENT_SCHEMA }}
         with:
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
-          service_account_key: ${{ secrets.SERVICE_ACCOUNT }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
           project_id: ${{ secrets.PROJECT_ID }}
           gae_config_path: ./server/app.yaml
       - name: Publish app to Google App Engine
