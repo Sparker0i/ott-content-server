@@ -24,6 +24,7 @@ jobs:
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
           service_account_key: ${{ secrets.SERVICE_ACCOUNT }}
           project_id: ${{ secrets.PROJECT_ID }}
+          gae_config_pathL: ./app.yaml
 
       - name: Publish app to Google App Engine
         run: |
