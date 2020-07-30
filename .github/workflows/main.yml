@@ -13,22 +13,32 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
+    name: Build
     runs-on: ubuntu-latest
+    - name: Checkout Repo
+      uses: actions/checkout@master
+    - name: Install Dependencies
+      run: npm install
+      working-directory: ./server
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout Repo
+        uses: actions/checkout@master
       - name: Initialize Google Cloud SDK
         uses: zxyle/publish-gae-action@master
         with:
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
-          service_account_key: ${{ secrets.SERVICE_ACCOUNT }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
           project_id: ${{ secrets.PROJECT_ID }}
-          gae_config_path: ./app.yaml
-
+          gae_config_path: ./server/app.yaml
       - name: Publish app to Google App Engine
-        run: |
+        run: | 
           # This client-secret.json is converted by GCP_SA_KEY.
           gcloud auth activate-service-account ${{ secrets.GCP_SA_EMAIL }} --key-file=client-secret.json
           gcloud config set project ${{ secrets.PROJECT_ID }}
           gcloud -q app deploy app.yaml --promote
+        working-directory: ./server
