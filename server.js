@@ -45,7 +45,7 @@ function queryDatabase(query, req, res) {
     })
 }
 
-app.post('/country-list', function (req, res) {
+app.get('/country-list', function (req, res) {
     queryDatabase(`SELECT * FROM ${db2.schema}.COUNTRY`, req, res);
 });
 
