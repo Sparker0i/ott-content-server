@@ -35,9 +35,8 @@ ibmdb.open(connString, function (err, connection) {
 });
 
 function queryDatabase(query, req, res) {
+    console.log(req.body);
     dbConnection.query(query, function(err, result, moreResultSets) {
-        console.log(moreResultSets);
-        
         if (err) res.send(err.message);
         else {
             res.setHeader('content-type', 'application/json');
@@ -52,13 +51,13 @@ app.get('/country-list', function (req, res) {
 
 app.post('/platform-list', function(req, res) {
     const code = req.body.code;
-    queryDatabase(`SELECT PLATFORM_ID, LOCALIZED_NAME FROM ${db2.schema}.PLATFORM_AVAILABILITY WHERE COUNTRY_CODE = '${code}' AND AVAILABILITY = 'Available';`, req, res);
+    queryDatabase(`SELECT ID, PLATFORM_ID, LOCALIZED_NAME, COUNTRY_CODE, AVAILABILITY, ICON FROM ${db2.schema}.PLATFORM_AVAILABILITY WHERE COUNTRY_CODE = '${code}' AND AVAILABILITY = 'Available';`, req, res);
 });
 
 app.post('/show-list', function(req, res) {
     const code = req.body.code;
     const platformId = req.body.platform_id;
-    queryDatabase(`SELECT ID, NAME, DESCRIPTION, TRAILER FROM ${db2.schema}.SHOW WHERE ID IN (SELECT SHOW_ID FROM ${db2.schema}.EPISODE WHERE ID IN (SELECT EPISODE_ID FROM ${db2.schema}.EPISODE_AVAILABILITY WHERE PLATFORM_MAPPING_ID = (SELECT ID FROM ${db2.schema}.PLATFORM_AVAILABILITY WHERE PLATFORM_ID = ${platformId} AND COUNTRY_CODE = '${code}')));`, req, res);
+    queryDatabase(`SELECT ID, NAME, DESCRIPTION, TRAILER, POSTER, '${code}' AS COUNTRY_CODE, ${platformId} as PLATFORM_ID FROM ${db2.schema}.SHOW WHERE ID IN (SELECT SHOW_ID FROM ${db2.schema}.EPISODE WHERE ID IN (SELECT EPISODE_ID FROM ${db2.schema}.EPISODE_AVAILABILITY WHERE PLATFORM_MAPPING_ID = (SELECT ID FROM ${db2.schema}.PLATFORM_AVAILABILITY WHERE PLATFORM_ID = ${platformId} AND COUNTRY_CODE = '${code}')));`, req, res);
 });
 
 app.post('/episode-list', function(req, res) {
